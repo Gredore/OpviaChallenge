@@ -1,4 +1,4 @@
-from server import SFTPServer
+from server import Server, SFTPServer
 import paramiko
 import socket
 import json
@@ -11,13 +11,12 @@ class ServerRunner:
 
         # Generate private key
         self._key = paramiko.RSAKey.generate(2048)
-        self._key.write_private_key_file(filename='private_key')#, password='test_password')
-        print(self._key.get_base64())
+        self._key.write_private_key_file(filename='private_key', password='test_password')
         # Create Paramiko transport
         self._transport = self.make_transport()
 
         # Setup server
-        self._s = SFTPServer()
+        self._s = Server()
 
         self._transport.start_server(server=self._s)
 
@@ -37,8 +36,9 @@ class ServerRunner:
         sock.listen(100)
         client, addr = sock.accept()
         t = paramiko.Transport(client)
-
         t.add_server_key(self._key)
+
+        t.set_subsystem_handler('sftp', paramiko.SFTPServer, SFTPServer)
         return t
 
     def close_transport(self):
