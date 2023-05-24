@@ -1,9 +1,23 @@
 import paramiko
+import threading
 
-class SFTPServer:
+class SFTPServer(paramiko.ServerInterface):
     def __init__(self):
+        self.event = threading.Event()
 
-        self._server = paramiko.SFTPServerInterface
+    def check_channel_request(self, kind, chanid):
+        if kind == 'session':
+            return paramiko.OPEN_SUCCEEDED
 
+    def check_auth_publickey(self, username, key):
+        print("hiiiiii")
+        return paramiko.AUTH_SUCCESSFUL
 
+    def get_allowed_auths(self, username):
+        return 'publickey'
 
+    def check_channel_exec_request(self, channel, command):
+        # This is the command we need to parse
+        print(command)
+        self.event.set()
+        return True
