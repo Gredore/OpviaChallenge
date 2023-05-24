@@ -1,4 +1,4 @@
-from server import Server, SFTPServer
+from server import Server, SFTPServer2
 import paramiko
 import socket
 import json
@@ -38,7 +38,7 @@ class ServerRunner:
         t = paramiko.Transport(client)
         t.add_server_key(self._key)
 
-        t.set_subsystem_handler('sftp', paramiko.SFTPServer, SFTPServer)
+        t.set_subsystem_handler('sftp', paramiko.SFTPServer, SFTPServer2)
         return t
 
     def close_transport(self):
