@@ -11,8 +11,9 @@ sftp = client.open_sftp()
 sftp.sshclient = client
 
 
-source_path = Path('C:/Users/Georg/OneDrive/Documents/opvia_challenge/TestFile.txt')
-target_path = Path('C:/Users/Georg/OneDrive/Documents/opvia_challenge/MovedTestFile.txt')
-#sftp.mkdir(str(Path('C:/Users/Georg/OneDrive/Documents/opvia_challenge/testfolder')))
-#print(sftp.listdir())
-sftp.get(str(source_path), str(target_path))
+source_path = str(Path('./files_to_move/TestFile.txt'))
+target_path = str(Path('C:/Users/Georg/OneDrive/Documents/opvia_challenge/destination_folder/TestFile.txt'))
+
+
+#sftp.listdir()
+sftp.get(source_path.encode('unicode_escape'), target_path.encode('unicode_escape'))

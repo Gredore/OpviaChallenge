@@ -1,8 +1,8 @@
 import paramiko
 import threading
 import os
-from paramiko import ServerInterface, SFTPServerInterface, SFTPServer, SFTPAttributes, \
-    SFTPHandle, SFTP_OK, AUTH_SUCCESSFUL, OPEN_SUCCEEDED
+from paramiko import SFTPServer, SFTPAttributes, \
+    SFTPHandle, SFTP_OK
 
 class Server(paramiko.ServerInterface):
     def __init__(self):
@@ -76,6 +76,7 @@ class SFTPServer2(paramiko.SFTPServerInterface):
 
     def open(self, path, flags, attr):
         path = self._realpath(path)
+        print("Testssss")
         try:
             binary_flag = getattr(os, 'O_BINARY', 0)
             flags |= binary_flag
