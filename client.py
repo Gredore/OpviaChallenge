@@ -5,7 +5,7 @@ import json
 
 class SFTPClientRunner:
     def __init__(self):
-        self.controls = self.get_controls(path="server_controls.json")
+        self.controls = self.get_controls(path="controls.json")
 
         self._key = self.get_key(
             key_path=self.controls["private_key_file_path"],

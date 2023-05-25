@@ -207,7 +207,7 @@ class SFTPServer(paramiko.SFTPServerInterface):
 class ServerRunner:
     def __init__(self):
         # Read in control file
-        self.controls = self.get_controls(path="server_controls.json")
+        self.controls = self.get_controls(path="controls.json")
 
         # Generate private key
         self._key = paramiko.RSAKey.generate(2048)
