@@ -1,3 +1,9 @@
 {
-  "private_key_file_path" : "./private_key"
+  "private_key_file_path" : "./private_key",
+  "password" : "test_password",
+  "address" : "localhost",
+  "port" : 22,
+  "source_folder_relative_path" : "./files_to_move",
+  "target_folder_relative_path" : "./destination_folder",
+  "list_of_files_to_move" : ["TestFile.txt", "TestFile2.txt"]
 }
