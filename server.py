@@ -216,40 +216,53 @@ class ServerRunner:
             password=self.controls["password"],
         )
 
+        # Start loop to keep server active after complete connection
         while True:
-            # Create Paramiko transport
-            self._transport = self.make_transport(
-                address=self.controls["address"], port=self.controls["port"]
-            )
+            try:
+                # Create Paramiko transport
+                self._transport = self.make_transport(
+                    address=self.controls["address"], port=self.controls["port"]
+                )
 
-            # Setup server
-            self._s = Server()
+                # Setup server
+                self._s = Server()
 
-            self._transport.start_server(server=self._s)
+                # start sftp server
+                self._transport.start_server(server=self._s)
 
-            while self._transport.is_active():
-                time.sleep(1)
+                while self._transport.is_active():
+                    time.sleep(1)
+            except Exception as e:
+                print(f"Error in connection: {e}")
 
     @staticmethod
     def get_controls(path):
+        """
+        Reads control file json
+        :param path: path to find the json control file
+        :return: diction of control file data
+        """
         with open(path, "r") as f:
             return json.load(f)
 
     def make_transport(self, address, port):
+        """
+        Sets up transport and accepts connections
+        :param address: address of server
+        :param port: port of server
+        :return: transport
+        """
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         sock.bind((address, port))
 
         sock.listen(100)
+
         client, addr = sock.accept()
         t = paramiko.Transport(client)
         t.add_server_key(self._key)
-
         t.set_subsystem_handler("sftp", paramiko.SFTPServer, SFTPServer)
         return t
-
-    def close_transport(self):
-        self._transport.close()
 
 
 if __name__ == "__main__":
